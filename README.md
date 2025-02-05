@@ -6,25 +6,26 @@ MyLogger is a lightweight C++ logging library that supports multi-level logging 
 ## 📂 Directory Structure
 
 ```
-MyLogger/
-├── include/
-│   ├── MyLogger/
-│   │   ├── formatter.hpp
-│   │   ├── level.hpp
-│   │   ├── logger.hpp
-│   │   ├── logwriter.hpp
-│   │   ├── threadpool.hpp
-├── src/
-│   ├── formatter.cpp
-│   ├── logger.cpp
-│   ├── logwriter.cpp
-│   ├── threadpool.cpp
-├── examples/
-│   ├── main.cpp
-│   ├── CMakeLists.txt
+MyLogger
+├── example
+│   ├── CMakeLists.txt
+│   └── main.cpp
+├── include
+│   └── MyLogger
+│       ├── formatter.hpp
+│       ├── level.hpp
+│       ├── logger.hpp
+│       ├── logwriter.hpp
+│       └── threadspool.hpp
+├── LICENSE
 ├── README.md
 ├── README_zh.md
-├── LICENSE
+└── src
+    └── MyLogger
+        ├── formatter.cpp
+        ├── logger.cpp
+        ├── logwriter.cpp
+        └── threadspool.cpp
 ```
 
 ## 🔍 Project Background
