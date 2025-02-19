@@ -1,18 +1,23 @@
+// logwriter 类的具体实现
+
+#pragma once
+
+#ifndef MYLOGGER_LOGWRITER_INL_HPP
+#define MYLOGGER_LOGWRITER_INL_HPP
+
+#ifndef MYLOGGER_LOGWRITER_HPP
+#include "logwriter.hpp"
+#endif // MYLOGGER_LOGWRITER_HPP
+
 #include <fstream>
 #include <iostream>
-#include <mutex>
 
-#include "MyLogger/logwriter.hpp"
-
-std::mutex LogWriter::m_console_mtx;
-std::mutex LogWriter::m_file_mtx;
-
-// LogWriter& LogWriter::getLogWriter() {
+// inline LogWriter& LogWriter::getLogWriter() {
 //     static LogWriter logWritter;
 //     return logWritter;
 // }
 
-std::string LogWriter::removeEscapeChar(const std::string& message) {
+inline std::string LogWriter::removeEscapeChar(const std::string& message) {
     std::string result;
     result.reserve(message.size());
     std::string::size_type pos_left = 0;
@@ -33,16 +38,18 @@ std::string LogWriter::removeEscapeChar(const std::string& message) {
     return result;
 }
 
-void LogWriter::writeToConsole(const std::string& message) {
-    std::unique_lock<std::mutex> lock(LogWriter::m_console_mtx);
-    std::cout << removeEscapeChar(message) << '\n';
+inline void LogWriter::writeToConsole(const std::string& message) {
+    std::unique_lock<std::mutex> lock(m_console_mtx);
+    std::cout << removeEscapeChar(message);
 }
 
-void LogWriter::writeToFile(const std::string& filePath, const std::string& message) {
-    std::unique_lock<std::mutex> lock(LogWriter::m_file_mtx);
+inline void LogWriter::writeToFile(const std::string& filePath, const std::string& message) {
+    std::unique_lock<std::mutex> lock(m_file_mtx);
     std::ofstream file(filePath, std::ios::app);
     if (file.is_open()) {
-        file << removeEscapeChar(message) << '\n';
+        file << removeEscapeChar(message);
         file.close();
     }
 }
+
+#endif // MYLOGGER_LOGWRITER_INL_HPP

@@ -2,16 +2,18 @@
 
 #pragma once
 
+#ifndef MYLOGGER_LOGWRITER_HPP
+#define MYLOGGER_LOGWRITER_HPP
+
 #include <mutex>
 #include <string>
+
+static std::mutex m_console_mtx;
+static std::mutex m_file_mtx;
 
 class LogWriter {
   private:
     friend class Logger;
-
-  private:
-    static std::mutex m_console_mtx;
-    static std::mutex m_file_mtx;
 
   private:
     LogWriter() = default;
@@ -28,3 +30,10 @@ class LogWriter {
     static void writeToConsole(const std::string& message);
     static void writeToFile(const std::string& filePath, const std::string& message);
 };
+
+#ifndef MYLOGGER_LOGWRITER_INL_HPP
+#include "logwriter-inl.hpp"
+MYLOGGER_LOGWRITER_INL_HPP
+#endif
+
+#endif // MYLOGGER_LOGWRITER_HPP

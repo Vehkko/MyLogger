@@ -2,12 +2,14 @@
 
 #pragma once
 
+#ifndef MYLOGGER_THREADSPOOL_HPP
+#define MYLOGGER_THREADSPOOL_HPP
+
 #include <condition_variable>
 #include <functional>
 #include <mutex>
 #include <queue>
 #include <thread>
-#include <utility>
 
 class ThreadsPool {
   private:
@@ -53,35 +55,9 @@ class ThreadsPool {
     void addTask(bool console, bool file, Func&& func, Args&&... args);
 };
 
-template <typename Func, typename... Args>
-void ThreadsPool::addFormatTask(Func&& func, Args&&... args) {
-    auto task = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-    {
-        std::unique_lock<std::mutex> lock(m_format_mtx);
-        m_format_queue.emplace(std::move(task));
-        // std::cout << "Add task to format thread queue.\n";
-    }
-    m_format_condition.notify_one();
-}
+#ifndef MYLOGGER_THREADSPOOL_INL_HPP
+#include "threadspool-inl.hpp"
+MYLOGGER_THREADSPOOL_INL_HPP
+#endif // MYLOGGER_THREADSPOOL_INL_HPP
 
-template <typename Func, typename... Args>
-void ThreadsPool::addConsoleOutputTask(Func&& func, Args&&... args) {
-    auto task = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-    {
-        std::unique_lock<std::mutex> lock(m_console_output_mtx);
-        m_console_output_queue.emplace(std::move(task));
-        // std::cout << "Add task to console output thread queue.\n";
-    }
-    m_console_output_condition.notify_one();
-}
-
-template <typename Func, typename... Args>
-void ThreadsPool::addFileOutputTask(Func&& func, Args&&... args) {
-    auto task = std::bind(std::forward<Func>(func), std::forward<Args>(args)...);
-    {
-        std::unique_lock<std::mutex> lock(m_file_output_mtx);
-        m_file_output_queue.emplace(std::move(task));
-        // std::cout << "Add task to file output thread queue.\n";
-    }
-    m_file_output_condition.notify_one();
-}
+#endif // MYLOGGER_THREADSPOOL_HPP
